@@ -36,7 +36,7 @@ Steps to reproduce the experiments of the simulation experiments.
 ``` r
 # from CRAN
 install.packages(c("ranger", "dplyr", "batchtools", "mlr", "ggplot2", "gridExtra", "tidyr", "reshape2",
-"ggExtra", "future.apply", "BBmisc", "data.table", "stringi", "checkmate", "kernlab", "xtable", "mlrCPO", "devtools"))
+"ggExtra", "future.apply", "BBmisc", "data.table", "stringi", "checkmate", "kernlab", "xtable", "mlrCPO", "devtools", "PMA"))
 
 # from github
 devtools::install_github("giuseppec/featureImportance")
