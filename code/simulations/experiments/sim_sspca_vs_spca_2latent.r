@@ -1,7 +1,7 @@
 
 library(kernlab)
 library(batchtools)
-load_all("packages/totalvis")
+library(totalvis)
 # unlink("results/simulation_results/sim2latent", recursive = TRUE)
 reg = makeExperimentRegistry(file.dir = "results/simulation_results/sim2latent", source = c("code/functions/gimp_sim.r", "code/functions/sspca.r", "code/functions/helper.r"), seed = 123, packages = "kernlab")
 
