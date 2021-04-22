@@ -56,7 +56,7 @@ addAlgorithm("sim", function(data, job, instance) {
   perm = featureImportance:::generatePermutations(groups, n.shapley.perm = 120)
   
   # generate all marginal contribution sets for each feature
-  mc = lapply(groups, function(x) generateMarginalContribution(x, perm))
+  mc = lapply(groups, function(x) featureImportance:::generateMarginalContribution(x, perm))
   mc = unlist(mc, recursive = FALSE)
   
   # get all unique sets
