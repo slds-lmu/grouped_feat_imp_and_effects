@@ -43,6 +43,19 @@ devtools::install_github("giuseppec/featureImportance")
 install_github("nickseedorff/totalvis")
 ```
 
+Alternatively, we also provide a custom docker image for this paper at https://hub.docker.com/repository/docker/quayau/rstudio_paper_grouped_imp.
+First, install docker and then build the image (Dockerfile is provided): 
+```
+docker build -t gimp .
+```
+Run the image with:
+```
+docker run --rm -p 8787:8787 -e PASSWORD=11111 quayau/rstudio_paper_grouped_imp
+```
+
+Open `localhost:8787` in your browser. Login with the username `rstudio` and the password `11111`. You can then run all code in this RStudio server instance.
+
+
 2.  Create an experimental registry, add experiments and problem and run simulations via
     scripts in subfolder `code/simulations/experiments`. Data produced by the scripts is stored in 
     the subfolder `results/simulation_results` as a separate registry.
