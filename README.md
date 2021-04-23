@@ -49,3 +49,12 @@ install_github("nickseedorff/totalvis")
 
 3.  To reproduce figures and tables of Section 3 and 4, run the scripts in subfolder `code/simulations/analysis`. The scripts are names with respect to the references subsections in the paper. Figures produced within the script are stored in `results/figures` 
     the subfolder `results/simulation_results` as a separate registry.    
+  
+4.  To reproduce figures and tables of Section 5, run the scripts in subfolder `code/usecase`:
+
+    -`code/usecase/psychology_feat_imp.R`: Code for feature importance measures.
+    -`code/usecase/psychology_gfs.R`: Code for sequential grouped feature importance.
+    -`code/usecase/psychology_sspca.R`: Code for CFEP.
+    
+    Data is from https://osf.io/kqjhr/ and is available as RData file in this repository.
+    
