@@ -3,7 +3,7 @@ library(kernlab)
 library(batchtools)
 library(totalvis)
 # unlink("results/simulation_results/sim2latent", recursive = TRUE)
-reg = makeExperimentRegistry(file.dir = "results/simulation_results/sim2latent", source = c("code/functions/gimp_sim.r", "code/functions/sspca.r", "code/functions/helper.r"), seed = 123, packages = "kernlab")
+reg = makeExperimentRegistry(file.dir = "results/simulation_results/sim2latent", source = c("code/functions/gimp_sim.R", "code/functions/sspca.R", "code/functions/helper.R"), seed = 123, packages = "kernlab")
 
 # add problem
 for (i in 1:100) addProblem(as.character(i), i) 

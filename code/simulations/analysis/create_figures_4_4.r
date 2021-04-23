@@ -5,7 +5,7 @@ library(tidyr)
 library(reshape2)
 library(ggExtra)
 
-source("code/simulations/helper.r")
+source("code/simulations/helper.R")
 theme_set(theme_bw())
 
 

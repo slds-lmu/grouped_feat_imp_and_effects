@@ -11,7 +11,7 @@ correlation = list("base" = c(0.1,0.1,0.1,0.1), "diff" = c(0.1,0.3,0.6,0.1))
 
 for(algo in algorithm){
   for(j in 1:length(correlation)){
-    reg = makeExperimentRegistry(file.dir = paste0("results/simulation_results/sim_corr_",algo,"_",names(correlation)[j]), source = c("code/functions/gimp.r", "code/functions/gimp_sim.r","code/functions/helper.r"), seed = 123, packages = "kernlab")
+    reg = makeExperimentRegistry(file.dir = paste0("results/simulation_results/sim_corr_",algo,"_",names(correlation)[j]), source = c("code/functions/gimp.R", "code/functions/gimp_sim.R","code/functions/helper.R"), seed = 123, packages = "kernlab")
     
     
     # add problem

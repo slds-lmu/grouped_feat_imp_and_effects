@@ -1,5 +1,5 @@
 # This script creates Figure 1 and Table 1 (section 3.1)
-source("code/simulations/helper.r")
+source("code/simulations/helper.R")
 library(dplyr)
 theme_set(theme_bw())
 

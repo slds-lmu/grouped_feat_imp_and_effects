@@ -2,7 +2,7 @@
 
 library(ggplot2)
 library(dplyr)
-source("code/simulations/helper.r")
+source("code/simulations/helper.R")
 theme_set(theme_bw())
 
 
