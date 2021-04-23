@@ -70,5 +70,5 @@ Open `localhost:8787` in your browser. Login with the username `rstudio` and the
     code/usecase/psychology_sspca.R                        # Code for CFEP
     code/usecase/psychology_collect_results.R              # Code for tables and figures
 ```
-Data is from https://osf.io/kqjhr/ and is available as RData file in this repository.
+Data for the usecase is from https://osf.io/kqjhr/ and is available as RData file in this repository.
     
