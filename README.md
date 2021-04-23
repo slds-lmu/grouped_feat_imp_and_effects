@@ -44,7 +44,7 @@ install_github("nickseedorff/totalvis")
 ```
 
 Alternatively, we also provide a custom [docker image](https://hub.docker.com/repository/docker/quayau/rstudio_paper_grouped_imp) for this paper.
-First, install docker and then build the image in your terminal (from the projects directody). The Dockerfile is provided. 
+First, install docker and then build the image in your terminal (from the projects directory). The Dockerfile is provided. 
 ```
 docker build -t gimp .
 ```
