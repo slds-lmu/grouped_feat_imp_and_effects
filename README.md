@@ -50,7 +50,7 @@ docker build -t gimp .
 ```
 Run the image with:
 ```
-docker run --rm -p 8787:8787 -e PASSWORD=11111 quayau/rstudio_paper_grouped_imp
+docker run --rm -p 8787:8787 -e PASSWORD=11111 gimp
 ```
 
 Open `localhost:8787` in your browser. Login with the username `rstudio` and the password `11111`. You can then run all code in this RStudio server instance.
