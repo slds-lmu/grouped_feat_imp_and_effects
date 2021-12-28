@@ -10,7 +10,7 @@ library(featureImportance)
 reg = makeExperimentRegistry(file.dir = "results/simulation_results/sim_groupsize", seed = 123)
 
 # add problem
-for (i in 1:20) addProblem(as.character(i), i) 
+for (i in 1:500) addProblem(as.character(i), i) 
 
 # define algorithm
 addAlgorithm("sim", function(data, job, instance) {
@@ -37,6 +37,7 @@ addAlgorithm("sim", function(data, job, instance) {
   
   
   # Model
+  library(mlr)
   learnerRF = makeLearner("regr.ranger", par.vals = list(num.trees = 2000))
   task = makeRegrTask(data = data, target = "y")
   train.ind = sample(1:getTaskSize(task), floor(getTaskSize(task)/2))
@@ -104,7 +105,7 @@ addAlgorithm("sim", function(data, job, instance) {
 addExperiments(repls = 1)
 
 # submit jobs
-start_time <- Sys.time()
-submitJobs()
-end_time <- Sys.time()
+#start_time <- Sys.time()
+#submitJobs()
+#end_time <- Sys.time()
 

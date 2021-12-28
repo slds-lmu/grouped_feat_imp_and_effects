@@ -18,7 +18,11 @@ for(algo in algorithm){
     for (i in 1:20) addProblem(as.character(i), i) 
     
     # define algorithm
-    addAlgorithm("sim", function(data, job, instance) {
+    addAlgorithm("sim", function(data, job, instance, correlation,...) {
+      
+      correlation = list("base" = c(0.1,0.1,0.1,0.1), "diff" = c(0.1,0.3,0.6,0.1))
+      
+      
       # generate data
       p = 10
       n = 1000
