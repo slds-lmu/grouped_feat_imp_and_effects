@@ -103,6 +103,7 @@ Gimp = R6Class("grouped_imp",
       }
     },
     group_only_permutation_feat_imp = function(group_df, regr.measure = mse, PIMP = TRUE, s = 10, n.feat.perm = 10L) {
+      browser()
       checkmate::assert_data_frame(group_df)
       testthat::expect_equal(colnames(group_df), c("feature", "group"))
       checkmate::assert_subset(as.character(group_df$feature), self$features)
@@ -120,8 +121,17 @@ Gimp = R6Class("grouped_imp",
       
       imp2 = summary(imp)
       imp2$GOPFI = NA
+      imp2$group_id = NA
+      for(j in 1:nrow(imp2)){
+        for (i in 1:length(gfeats)) {
+          feats = gfeats[[i]]
+          if(identical(imp2$features[j],paste(feats,collapse = ","))) imp2$group_id[j] = names(gfeats)[i]
+          #imp2$group_id[which(imp2$features == feats)] =  names(gfeats)[i]
+        }
+      }
+      
       for (group in groups) {
-        imp2$GOPFI[which(group == imp2$features)] = (imp2 %>% dplyr::filter(features == "all") %>% pull(2)) - (imp2 %>% dplyr::filter(features == group) %>% pull(2)) 
+        imp2$GOPFI[which(imp2$group_id == group)] = (imp2 %>% dplyr::filter(group_id == "all") %>% pull(2)) - (imp2 %>% dplyr::filter(group_id == group) %>% pull(2)) 
       }
       if (PIMP) {
         res = self$res

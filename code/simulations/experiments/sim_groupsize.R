@@ -1,11 +1,5 @@
 
-library(BBmisc)
-library(mlr)
-library(data.table)
-library(stringi)
-library(batchtools)
-library(checkmate)
-library(featureImportance)
+
 # unlink("results/simulation_results/sim_groupsize", recursive = TRUE)
 reg = makeExperimentRegistry(file.dir = "results/simulation_results/sim_groupsize", seed = 123)
 
@@ -14,6 +8,14 @@ for (i in 1:500) addProblem(as.character(i), i)
 
 # define algorithm
 addAlgorithm("sim", function(data, job, instance) {
+  library(BBmisc)
+  library(mlr)
+  library(data.table)
+  library(stringi)
+  library(batchtools)
+  library(checkmate)
+  library(featureImportance)
+  
   # generate data
   p1 = 6
   p2 = 2

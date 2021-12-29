@@ -5,7 +5,7 @@ library(gridExtra)
 
 # parameters
 path = "results/simulation_results/sim_sparsity/results/"
-vec = 1:20
+vec = 1:500
 
 # create Figure 5: Comparison of Shapley importance on group and feature level
 df_shap = get_shapley_imp(vec, path)
