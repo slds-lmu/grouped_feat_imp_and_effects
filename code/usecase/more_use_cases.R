@@ -19,41 +19,47 @@ x = data.frame(colon$x)
 group_df_colon = data.frame(feature = as.character(names(x)), group = as.character(group), stringsAsFactors = FALSE)
 task_colon = makeClassifTask(id = "colon", data = data.frame(x, y = as.factor(colon$y)), target = "y")
 
-learners_regr = makeLearners(c("lm", "ranger", "h2o.deeplearning", "ksvm", "cvglmnet"), type = "regr")
-learners_classif = makeLearners(c("logreg", "ranger", "h2o.deeplearning", "ksvm", "cvglmnet"), type = "classif")
+#fuelsubset
+library(FDboost)
+data(fuelSubset, package = "FDboost")
+str(fuelSubset)
+fuelsubset.df = data.frame(fuelSubset[c("heatan", "h2o", "UVVIS", "NIR")])
+task_fuelsubset = makeRegrTask(id = "fuelsubset", data = fuelsubset.df, target = "heatan")
+group_df_fuelsubset = data.frame(feature = as.character(getTaskFeatureNames(task_fuelsubset)), 
+  group = as.character(c("H2O", rep("UVVIS", 134), rep("NIR", 231))), stringsAsFactors = FALSE)
+
+
+learners_regr = makeLearners(c("lm", "ranger", "h2o.deeplearning", "ksvm"), type = "regr")
+learners_classif = makeLearners(c("logreg", "ranger", "h2o.deeplearning", "ksvm"), type = "classif")
 
 bmr_bw = benchmark(learners_regr, task_bw, resamplings = makeResampleDesc("Subsample", iters = 100L), measures = rsq)
 bmr_colon = benchmark(learners_classif, task_colon, resamplings = makeResampleDesc("Subsample", iters = 100L), measures = acc)
+bmr_fuelsubset = benchmark(learners_regr, task_fuelsubset, resamplings = makeResampleDesc("Subsample", iters = 100L), measures = rsq)
 
 
 #bwt use case
 learner_bwt = makeLearner("regr.ranger")
-mod_bwt = train(learner_bwt, task1)
-res_bwt = resample(learner_bwt, task1, cv10, measures = mse, models = TRUE)
+mod_bwt = train(learner_bwt, task_bw)
+res_bwt = resample(learner_bwt, task_bw, cv10, measures = mse, models = TRUE)
 
-learner_diabetes = makeLearner("regr.lm")
-mod_diabetes = train(learner_diabetes, task2)
-res_diabetes = resample(learner_diabetes, task2, cv10, measures = mse, models = TRUE)
-
-#group lasso
-group_df_bwt = data.frame(feature = as.character(getTaskFeatureNames(task1)), group = Birthwt$group)
+group_df_bwt = data.frame(feature = as.character(getTaskFeatureNames(task_bw)), group = Birthwt$group)
 group_df_bwt$feature = as.character(group_df_bwt$feature)
 group_df_bwt$group = as.character(group_df_bwt$group)
-group_df_diabetes = data.frame(feature = getTaskFeatureNames(task2), group = c(rep("body", 4), rep("lab", 6)))
-group_df_diabetes$feature = as.character(group_df_diabetes$feature)
-group_df_diabetes$group = as.character(group_df_diabetes$group)
+# group_df_diabetes = data.frame(feature = getTaskFeatureNames(task2), group = c(rep("body", 4), rep("lab", 6)))
+# group_df_diabetes$feature = as.character(group_df_diabetes$feature)
+# group_df_diabetes$group = as.character(group_df_diabetes$group)
 
-x = as.data.frame(getTaskData(task1, target.extra = TRUE)$data)
-x = as.matrix(x)
-y = getTaskData(task1, target.extra = TRUE)$target
-fit_bwt = grpreg(x,y,group_df_bwt$group, penalty="grLasso", nlambda = 400)
-cv_bwt = cv.grpreg(x,y,group_df_bwt$group, penalty="grLasso", nlabmda = 400)
-plot(fit_bwt, main = "Group Lasso")
+# x = as.data.frame(getTaskData(task1, target.extra = TRUE)$data)
+# x = as.matrix(x)
+# y = getTaskData(task1, target.extra = TRUE)$target
+# fit_bwt = grpreg(x,y,group_df_bwt$group, penalty="grLasso", nlambda = 400)
+# cv_bwt = cv.grpreg(x,y,group_df_bwt$group, penalty="grLasso", nlabmda = 400)
+# plot(fit_bwt, main = "Group Lasso")
 
 #gimp analysis
 library(future.apply)
 source("code/functions/gimp.R")
-gimp_bwt = Gimp$new(task = task1, res = res_bwt, mod = mod_bwt, lrn = learner_bwt)
+gimp_bwt = Gimp$new(task = task_bw, res = res_bwt, mod = mod_bwt, lrn = learner_bwt)
 gpfi_bwt = gimp_bwt$group_permutation_feat_imp(group_df = group_df_bwt, PIMP = FALSE)
 gopfi_bwt = gimp_bwt$group_only_permutation_feat_imp(group_df = group_df_bwt, PIMP = FALSE)
 LOGO_bwt = gimp_bwt$drop_group_importance(group_df = group_df_bwt, resampling = cv10, measures = mse)
@@ -83,24 +89,24 @@ LOGI_bwt = gimp_bwt$group_only_importance(group_df = group_df_bwt, resampling = 
   goi_df$goi[8] = goi$ftv$aggr - goi$featureless$aggr
   goi_df$goi = goi_df$goi * (-1)
 LOGI_bwt = goi_df
-
+# 
 shap_bwt = gimp_bwt$shapley(group_df = group_df_bwt, res = res_bwt, n.shapley.perm = 120)
-
-rank_df = data.frame(group = gpfi_bwt$features, stringsAsFactors = FALSE)
-gpfi_bwt$rank_gpfi = rank(-gpfi_bwt$mse)
-rank_df = rank_df %>% left_join(gpfi_bwt %>% dplyr::select(features, rank_gpfi), by = c("group" = "features"))
-gopfi_bwt$rank_gopfi = rank(-gopfi_bwt$GOPFI)
-rank_df = rank_df %>% left_join(gopfi_bwt %>% dplyr::select(features, rank_gopfi), by = c("group" = "features"))
-LOGO_bwt$rank_LOGO = rank(-LOGO_bwt$DGI)
-rank_df = rank_df %>% left_join(LOGO_bwt %>% dplyr::select(Group, rank_LOGO), by = c("group" = "Group"))
-LOGI_bwt$rank_LOGI = rank(-LOGI_bwt$goi)
-rank_df = rank_df %>% left_join(LOGI_bwt %>% dplyr::select(Group, rank_LOGI), by = c("group" = "Group"))
-shap_bwt$rank_shap = rank(-shap_bwt$meanShapImp)
-rank_df = rank_df %>% left_join(shap_bwt %>% dplyr::select(group, rank_shap), by = c("group" = "group"))
-
-df_lasso = data.frame(group = c("ui", "smoke", "race", "ht", "ptl", "lwt", "age", "ftv"), rank_LASSO = 1:8)
-rank_df = rank_df %>% left_join(df_lasso %>% dplyr::select(group, rank_LASSO), by = c("group" = "group"))
-rank_df
+# 
+# rank_df = data.frame(group = gpfi_bwt$features, stringsAsFactors = FALSE)
+# gpfi_bwt$rank_gpfi = rank(-gpfi_bwt$mse)
+# rank_df = rank_df %>% left_join(gpfi_bwt %>% dplyr::select(features, rank_gpfi), by = c("group" = "features"))
+# gopfi_bwt$rank_gopfi = rank(-gopfi_bwt$GOPFI)
+# rank_df = rank_df %>% left_join(gopfi_bwt %>% dplyr::select(features, rank_gopfi), by = c("group" = "features"))
+# LOGO_bwt$rank_LOGO = rank(-LOGO_bwt$DGI)
+# rank_df = rank_df %>% left_join(LOGO_bwt %>% dplyr::select(Group, rank_LOGO), by = c("group" = "Group"))
+# LOGI_bwt$rank_LOGI = rank(-LOGI_bwt$goi)
+# rank_df = rank_df %>% left_join(LOGI_bwt %>% dplyr::select(Group, rank_LOGI), by = c("group" = "Group"))
+# shap_bwt$rank_shap = rank(-shap_bwt$meanShapImp)
+# rank_df = rank_df %>% left_join(shap_bwt %>% dplyr::select(group, rank_shap), by = c("group" = "group"))
+# 
+# df_lasso = data.frame(group = c("ui", "smoke", "race", "ht", "ptl", "lwt", "age", "ftv"), rank_LASSO = 1:8)
+# rank_df = rank_df %>% left_join(df_lasso %>% dplyr::select(group, rank_LASSO), by = c("group" = "group"))
+# rank_df
 
 
 
@@ -171,3 +177,32 @@ LOGI_colon %>% arrange(desc(goi))
 gopfi_colon = gimp_colon$group_only_permutation_feat_imp(group_df = group_df_colon, PIMP = FALSE)
 
 shap_colon = gimp_colon$shapley(group_df = group_df_colon, res = res_colon, n.shapley.perm = 120)
+
+#fuelsubset use case
+learner_fuelsubset = makeLearner("regr.ranger")
+mod_fuelsubset = train(learner_fuelsubset, task_fuelsubset)
+res_fuelsubset = resample(learner_fuelsubset, task_fuelsubset, cv10, measures = mse, models = TRUE)
+
+gimp_fuelsubset = Gimp$new(task = task_fuelsubset, res = res_fuelsubset, mod = mod_fuelsubset, lrn = learner_fuelsubset)
+gpfi_fuelsubset = gimp_fuelsubset$group_permutation_feat_imp(group_df = group_df_fuelsubset, PIMP = FALSE)
+gopfi_fuelsubset = gimp_fuelsubset$group_only_permutation_feat_imp(group_df = group_df_fuelsubset, PIMP = FALSE)
+
+LOGO_fuelsubset = gimp_fuelsubset$drop_group_importance(group_df = group_df_fuelsubset, resampling = cv10, measures = mse)
+dgi = LOGO_fuelsubset
+dgi_df = data.frame(Group = names(LOGO_fuelsubset)[-4], DGI = NA)
+dgi_df$DGI[1] = dgi$all$aggr - dgi$H2O$aggr
+dgi_df$DGI[2] = dgi$all$aggr - dgi$UVVIS$aggr
+dgi_df$DGI[3] = dgi$all$aggr - dgi$NIR$aggr
+dgi_df$DGI = dgi_df$DGI * (-1)
+LOGO_fuelsubset = dgi_df
+
+
+LOGI_fuelsubset = gimp_fuelsubset$group_only_importance(group_df = group_df_fuelsubset, resampling = cv10, measures = mse)
+goi = LOGI_fuelsubset
+goi_df = data.frame(Group = names(LOGI_fuelsubset)[-4], goi = NA)
+goi_df$goi[1] = goi$featureless$aggr - goi[[1]]$aggr
+goi_df$goi[2] = goi$featureless$aggr - goi[[2]]$aggr
+goi_df$goi[3] = goi$featureless$aggr - goi[[3]]$aggr
+LOGI_fuelsubset = goi_df
+
+shap_fuelsubset = gimp_fuelsubset$shapley(group_df = group_df_fuelsubset, res = res_fuelsubset, n.shapley.perm = 120)
