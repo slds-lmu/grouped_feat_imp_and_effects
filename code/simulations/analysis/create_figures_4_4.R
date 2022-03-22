@@ -36,9 +36,9 @@ result_sspca_aggr = list_sspca_f1[[1]]
 pd_true = list_sspca_f1[[2]]
 
 # plot for sspca
-colors = c("Estimated CFDP (Sparse SPCA)" = "red", "Ground Truth" = "blue")
+colors = c("Estimated CFEP (Sparse SPCA)" = "red", "Ground Truth" = "blue")
 p1 = ggplot(df_sspca, aes(x = z, y = pd)) + geom_point(alpha = 0) +
-  geom_line(data = result_sspca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFDP (Sparse SPCA)"), lty = 1, lwd = 1.2) + 
+  geom_line(data = result_sspca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFEP (Sparse SPCA)"), lty = 1, lwd = 1.2) + 
   geom_line(data = pd_true, aes(x = quantile, y = mean_prediction, color = "Ground Truth"), lty= 2, lwd = 1.2) + 
   geom_ribbon(data = result_sspca_aggr,aes(x = quantile, y = mean_prediction, ymin = lower, ymax = upper), alpha = 0.3, fill = "grey") + 
   scale_color_manual(values = colors) + 
@@ -57,9 +57,9 @@ result_pca_aggr = list_pca_f1[[1]]
 pd_true = list_pca_f1[[2]]
 
 # plot for spca
-colors = c("Estimated CFDP (Sparse PCA)" = "red", "Ground Truth" = "blue")
+colors = c("Estimated CFEP (Sparse PCA)" = "red", "Ground Truth" = "blue")
 p2 = ggplot(df_pca, aes(x = z, y = pd)) + geom_point(alpha = 0) +
-  geom_line(data = result_pca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFDP (Sparse PCA)"), lty = 1, lwd = 1.2) + 
+  geom_line(data = result_pca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFEP (Sparse PCA)"), lty = 1, lwd = 1.2) + 
   geom_line(data = pd_true, aes(x = quantile, y = mean_prediction, color = "Ground Truth"), lty = 2, lwd = 1.2) + 
   geom_ribbon(data = result_pca_aggr,aes(x = quantile, y = mean_prediction, ymin = lower, ymax = upper), alpha = 0.3, fill = "grey") + 
   scale_color_manual(values = colors) +
@@ -175,9 +175,9 @@ pd_true = list_sspca_f1[[2]]
 
 
 # plot for sspca
-colors = c("Estimated CFDP (Sparse SPCA)" = "red", "Ground Truth" = "blue")
+colors = c("Estimated CFEP (Sparse SPCA)" = "red", "Ground Truth" = "blue")
 p1 = ggplot(df_sspca, aes(x = z1, y = pd1)) + geom_point(alpha = 0) +
-  geom_line(data = result_sspca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFDP (Sparse SPCA)"), lwd = 1.2) + 
+  geom_line(data = result_sspca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFEP (Sparse SPCA)"), lwd = 1.2) + 
   geom_line(data = pd_true, aes(x = quantile, y = mean_prediction, color = "Ground Truth"), lty = 2, lwd = 1.2) + 
   geom_ribbon(data = result_sspca_aggr,aes(x = quantile, y = mean_prediction, ymin = lower, ymax = upper), alpha = 0.3, fill = "grey") + 
   theme_bw() + #ylim(min(result_sspca_aggr$lower), max(result_sspca_aggr$upper)) + 
@@ -196,9 +196,9 @@ result_pca_aggr = list_pca_f1[[1]]
 pd_true = list_pca_f1[[2]]
 
 # plot for spca
-colors = c("Estimated CFDP (Sparse PCA)" = "red", "Ground Truth" = "blue")
+colors = c("Estimated CFEP (Sparse PCA)" = "red", "Ground Truth" = "blue")
 p2 = ggplot(df_pca, aes(x = z1, y = pd1)) + geom_point(alpha = 0) +
-  geom_line(data = result_pca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFDP (Sparse PCA)"), lwd = 1.2) + 
+  geom_line(data = result_pca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFEP (Sparse PCA)"), lwd = 1.2) + 
   geom_line(data = pd_true, aes(x = quantile, y = mean_prediction, color = "Ground Truth"), lty = 2, lwd = 1.2) + 
   geom_ribbon(data = result_pca_aggr,aes(x = quantile, y = mean_prediction, ymin = lower, ymax = upper), alpha = 0.3, fill = "grey") + 
   theme_bw() + #ylim(min(result_sspca_aggr$lower), max(result_sspca_aggr$upper)) + 
@@ -229,9 +229,9 @@ pd_true = list_sspca_f2[[2]]
 
 
 # plot for sspca
-colors = c("Estimated CFDP (Sparse SPCA)" = "red", "Ground Truth" = "blue")
+colors = c("Estimated CFEP (Sparse SPCA)" = "red", "Ground Truth" = "blue")
 p3 = ggplot(df_sspca, aes(x = z2, y = pd2)) + geom_point(alpha = 0) +
-  geom_line(data = result_sspca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFDP (Sparse SPCA)"), lwd = 1.2) + 
+  geom_line(data = result_sspca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFEP (Sparse SPCA)"), lwd = 1.2) + 
   geom_line(data = pd_true, aes(x = quantile, y = mean_prediction, color = "Ground Truth"), lty = 2, lwd = 1.2) + 
   geom_ribbon(data = result_sspca_aggr,aes(x = quantile, y = mean_prediction, ymin = lower, ymax = upper), alpha = 0.3, fill = "grey") + 
   theme_bw() +
@@ -251,9 +251,9 @@ result_pca_aggr = list_pca_f2[[1]]
 pd_true = list_pca_f2[[2]]
 
 # plot for spca
-colors = c("Estimated CFDP (Sparse PCA)" = "red", "Ground Truth" = "blue")
+colors = c("Estimated CFEP (Sparse PCA)" = "red", "Ground Truth" = "blue")
 p4 = ggplot(df_pca, aes(x = z2, y = pd2)) + geom_point(alpha = 0) +
-  geom_line(data = result_pca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFDP (Sparse PCA)"), lwd = 1.2) + 
+  geom_line(data = result_pca_aggr, aes(x = quantile, y = mean_prediction, color = "Estimated CFEP (Sparse PCA)"), lwd = 1.2) + 
   geom_line(data = pd_true, aes(x = quantile, y = mean_prediction, color = "Ground Truth"), lty = 2, lwd = 1.2) + 
   geom_ribbon(data = result_pca_aggr,aes(x = quantile, y = mean_prediction, ymin = lower, ymax = upper), alpha = 0.3, fill = "grey") + 
   theme_bw() +
